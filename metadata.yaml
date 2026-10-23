@@ -4,7 +4,7 @@ tier: capability          # primitive | capability | blueprint
 maturity: experimental    # experimental | stable | deprecated
 description: Global external HTTPS load balancer with managed certificates, HTTP redirect, serverless NEG, NEG and bucket backends, optional CDN and Cloud Armor
 owners: [platform]
-upstream: null            # e.g. "terraform-aws-modules/s3-bucket/aws 5.17.0"
-pairs_with: null          # e.g. "terraform-google-gcs-bucket"
+upstream: "terraform-google-modules/lb-http/google//modules/dynamic_backends 14.2.0"
+pairs_with: terraform-aws-alb
 registry_name: terraform-google-https-lb
 deprecated: null          # { removal: YYYY-MM-DD, replacement: <repo> }
