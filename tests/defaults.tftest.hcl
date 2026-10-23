@@ -202,7 +202,7 @@ run "test_tags_contract" {
       application  = "example"
       owner        = "platform"
       cost_center  = "eng"
-      extra_tags   = { owner = "y", team = "z" }
+      extra_tags   = { Owner = "y", Team = "Core Team" }
     }
   }
 
@@ -212,7 +212,7 @@ run "test_tags_contract" {
   }
 
   assert {
-    condition     = output.labels.team == "z"
+    condition     = output.labels.team == "core-team"
     error_message = "context.extra_tags must be merged into labels."
   }
 }
