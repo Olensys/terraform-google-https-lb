@@ -1,9 +1,9 @@
 variable "name" {
-  description = "Load balancer name, used as the prefix of every resource. Lowercase letters, digits and hyphens, at most 48 characters, so the longest derived name (\"<name>-https-redirect\") stays within Google's 63-character limit."
+  description = "Load balancer name, used as the prefix of every resource. Lowercase letters, digits and hyphens, starting with a letter, at most 48 characters, so the longest derived name (\"<name>-https-redirect\") stays within Google's 63-character limit."
   type        = string
   validation {
-    condition     = can(regex("^[a-z0-9-]{1,48}$", var.name))
-    error_message = "name must match ^[a-z0-9-]{1,48}$ (1 to 48 characters)."
+    condition     = can(regex("^[a-z][a-z0-9-]{0,47}$", var.name))
+    error_message = "name must match ^[a-z][a-z0-9-]{0,47}$ (1 to 48 characters, starting with a letter)."
   }
 }
 

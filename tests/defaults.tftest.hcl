@@ -297,6 +297,16 @@ run "test_name_max_length_accepted" {
   }
 }
 
+run "test_name_must_start_with_letter" {
+  command = plan
+
+  variables {
+    name = "1foo"
+  }
+
+  expect_failures = [var.name]
+}
+
 run "test_name_rejects_uppercase" {
   command = plan
 
