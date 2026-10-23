@@ -19,8 +19,11 @@ locals {
         cache_key_policy = { include_host = true, include_protocol = true, include_query_string = true }
       }
       log_config = { enable = true, sample_rate = 1.0 }
+      # Zonal NEGs need an explicit balancing mode; serverless NEGs take none.
       groups = [{
-        group = b.type == "cloud_run" ? google_compute_region_network_endpoint_group.cloud_run[k].id : coalesce(b.neg_id, "unset")
+        group                 = b.type == "cloud_run" ? google_compute_region_network_endpoint_group.cloud_run[k].id : coalesce(b.neg_id, "unset")
+        balancing_mode        = b.type == "neg" ? "RATE" : null
+        max_rate_per_endpoint = b.type == "neg" ? 100 : null
       }]
       # Serverless NEGs take no health check or balancing mode; zonal / hybrid NEGs need both.
       health_check = b.type == "neg" ? { protocol = "HTTP", request_path = "/", port_specification = "USE_SERVING_PORT" } : null
@@ -121,6 +124,7 @@ module "this" {
   url_map        = google_compute_url_map.this[0].self_link
 
   ssl                             = true
+  random_certificate_suffix       = true
   managed_ssl_certificate_domains = var.domains
   ssl_policy                      = google_compute_ssl_policy.this[0].self_link
   quic                            = true

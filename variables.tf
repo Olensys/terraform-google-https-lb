@@ -1,9 +1,9 @@
 variable "name" {
-  description = "Load balancer name, used as the prefix of every resource. Lowercase letters, digits and hyphens, at most 50 characters (leaves room for the backend suffixes within Google's 63-character limit)."
+  description = "Load balancer name, used as the prefix of every resource. Lowercase letters, digits and hyphens, at most 48 characters, so the longest derived name (\"<name>-https-redirect\") stays within Google's 63-character limit."
   type        = string
   validation {
-    condition     = can(regex("^[a-z][a-z0-9-]{0,49}$", var.name))
-    error_message = "name must match ^[a-z][a-z0-9-]{0,49}$ (at most 50 characters, starting with a letter)."
+    condition     = can(regex("^[a-z0-9-]{1,48}$", var.name))
+    error_message = "name must match ^[a-z0-9-]{1,48}$ (1 to 48 characters)."
   }
 }
 
@@ -47,7 +47,7 @@ variable "domains" {
 variable "backends" {
   description = <<-EOT
     Backends keyed by a short name (lowercase letters, digits, hyphens). type is one of:
-    cloud_run (needs service_name and region; a serverless NEG is created), neg (needs neg_id, an existing NEG id or self link),
+    cloud_run (needs service_name and region; a serverless NEG is created), neg (needs neg_id, an existing zonal GCE_VM_IP_PORT NEG id or self link),
     bucket (needs bucket_name; a backend bucket is created). paths are the URL paths routed to the backend; the default backend
     serves everything else, every other backend needs paths other than ["/*"].
   EOT

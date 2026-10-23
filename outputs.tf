@@ -67,11 +67,12 @@ output "ssl_policy_profile" {
 }
 
 output "lb_settings" {
-  description = "HTTPS settings handed to the upstream module: ssl, https_redirect, quic, managed_certificate_domains. Null when create is false."
+  description = "HTTPS settings handed to the upstream module: ssl, https_redirect, quic, random_certificate_suffix, managed_certificate_domains. Null when create is false."
   value = var.create ? {
     ssl                         = true
     https_redirect              = var.http_redirect
     quic                        = true
+    random_certificate_suffix   = true
     managed_certificate_domains = var.domains
   } : null
 }
