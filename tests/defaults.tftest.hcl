@@ -29,6 +29,11 @@ run "test_http_redirect_default" {
   }
 
   assert {
+    condition     = output.lb_settings.random_certificate_suffix == true
+    error_message = "The certificate name must carry a random suffix."
+  }
+
+  assert {
     condition     = output.lb_settings.quic == true
     error_message = "QUIC must be enabled."
   }
@@ -67,6 +72,29 @@ run "test_backend_per_key" {
   assert {
     condition     = length(google_compute_backend_bucket.this) == 1
     error_message = "One backend bucket per bucket backend."
+  }
+
+  assert {
+    condition     = length(google_compute_url_map.this[0].path_matcher[0].path_rule) == 3
+    error_message = "One path rule per non-default backend."
+  }
+
+  assert {
+    condition = alltrue([
+      for p in ["/api/*", "/legacy/*", "/static/*"] :
+      contains(flatten([for r in google_compute_url_map.this[0].path_matcher[0].path_rule : r.paths]), p)
+    ])
+    error_message = "Every fixture path must appear in a path rule."
+  }
+
+  assert {
+    condition     = output.backend_config.legacy.groups[0].balancing_mode == "RATE" && output.backend_config.legacy.groups[0].max_rate_per_endpoint == 100
+    error_message = "neg backends must use RATE balancing with max_rate_per_endpoint 100."
+  }
+
+  assert {
+    condition     = try(output.backend_config.web.groups[0].balancing_mode, null) == null
+    error_message = "cloud_run backends must not set a balancing mode."
   }
 
   assert {
@@ -155,6 +183,11 @@ run "test_create_false_plans_nothing" {
   assert {
     condition     = length(google_compute_region_network_endpoint_group.cloud_run) == 0 && length(google_compute_backend_bucket.this) == 0
     error_message = "No resources may be planned when create is false."
+  }
+
+  assert {
+    condition     = length(google_compute_ssl_policy.this) == 0 && length(google_compute_url_map.this) == 0
+    error_message = "No SSL policy or URL map may be planned when create is false."
   }
 }
 
@@ -245,10 +278,23 @@ run "test_name_length_validation" {
   command = plan
 
   variables {
-    name = "this-name-is-definitely-longer-than-fifty-characters-x"
+    name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   }
 
   expect_failures = [var.name]
+}
+
+run "test_name_max_length_accepted" {
+  command = plan
+
+  variables {
+    name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+
+  assert {
+    condition     = output.name == "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    error_message = "A 48-character name must be accepted."
+  }
 }
 
 run "test_name_rejects_uppercase" {
