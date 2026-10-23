@@ -23,14 +23,20 @@ Global external HTTPS load balancer with managed certificates, HTTP redirect, se
 | `bucket` | `bucket_name` | Backend bucket | no | Cloud Armor does not apply to backend buckets. |
 
 Every backend other than `default_backend` needs `paths` other than `["/*"]`.
+- `context.extra_tags` keys and values are normalised to valid GCP label syntax (lowercase, `[^a-z0-9_-]` → `-`, 63 chars); `labels` are applied verbatim and win.
 
 ## Usage
 
 ```hcl
-module "this" {
-  source = "git::https://github.com/Olensys/terraform-google-https-lb.git?ref=v1.0.0"
+module "naming" {
+  source  = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
+  context = var.context
+}
 
-  name       = "example"
+module "this" {
+  source = "git::https://github.com/Olensys/terraform-google-https-lb.git?ref=v1.1.0"
+
+  name       = module.naming.name
   project_id = "my-project"
   context = {
     organization = "olensys"
@@ -46,6 +52,8 @@ module "this" {
     static = { type = "bucket", bucket_name = "my-static-assets", paths = ["/static/*"] }
   }
   default_backend = "web"
+
+  labels = module.naming.labels
 }
 ```
 
