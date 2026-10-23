@@ -1,6 +1,6 @@
-# __NAME__
+# terraform-google-https-lb
 
-__DESCRIPTION__
+Global external HTTPS load balancer with managed certificates, HTTP redirect, serverless NEG, NEG and bucket backends, optional CDN and Cloud Armor
 
 ## Opinions
 
@@ -10,7 +10,7 @@ __DESCRIPTION__
 
 ```hcl
 module "this" {
-  source = "git::https://github.com/Olensys/__NAME__.git?ref=v1.0.0"
+  source = "git::https://github.com/Olensys/terraform-google-https-lb.git?ref=v1.0.0"
 
   name = "example"
   context = {
