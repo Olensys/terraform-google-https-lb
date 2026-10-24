@@ -28,6 +28,16 @@ Every backend other than `default_backend` needs `paths` other than `["/*"]`.
 ## Usage
 
 ```hcl
+variable "context" {
+  default = {
+    organization = "olensys"
+    environment  = "dev"
+    application  = "example"
+    owner        = "platform"
+    cost_center  = "eng"
+  }
+}
+
 module "naming" {
   source  = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
   context = var.context
@@ -38,13 +48,7 @@ module "this" {
 
   name       = module.naming.name
   project_id = "my-project"
-  context = {
-    organization = "olensys"
-    environment  = "dev"
-    application  = "example"
-    owner        = "platform"
-    cost_center  = "eng"
-  }
+  context = var.context
 
   domains = ["app.example.com"]
   backends = {
