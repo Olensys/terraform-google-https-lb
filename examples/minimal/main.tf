@@ -25,12 +25,12 @@ variable "domain" {
 module "this" {
   source = "../../"
 
-  name       = "example"
+  name       = "olensys-test-lb"
   project_id = var.project_id
   context = {
     organization = "olensys"
     environment  = "test"
-    application  = "example"
+    application  = "lb"
     owner        = "platform"
     cost_center  = "eng"
   }
