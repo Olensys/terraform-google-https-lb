@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/Olensys/terraform-google-https-lb/compare/v1.1.0...v1.1.1) (2026-10-24)
+
+
+### Bug Fixes
+
+* run integration on change and weekly instead of nightly ([aa80ee7](https://github.com/Olensys/terraform-google-https-lb/commit/aa80ee702a084ed77d597667d83ed24fb414ddad))
+
 ## 1.1.0
 
 ### Fixes
