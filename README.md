@@ -61,6 +61,8 @@ module "this" {
 }
 ```
 
+The example in `examples/minimal` deploys its own hello Cloud Run service, so it needs no existing service. Its inputs are `TF_VAR_project_id` and, optionally, `TF_VAR_domain`.
+
 The upstream module also uses `google-beta`, so both providers are required. Neither provider needs a default project; every resource sets `project` explicitly.
 
 <!-- BEGIN_TF_DOCS -->

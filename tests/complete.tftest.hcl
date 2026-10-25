@@ -1,5 +1,5 @@
 # Run only by the nightly integration workflow, against real cloud credentials.
-# Requires TF_VAR_project_id, TF_VAR_service_name and TF_VAR_domain.
+# Requires TF_VAR_project_id; TF_VAR_domain is optional.
 run "apply_minimal" {
   command = apply
 
