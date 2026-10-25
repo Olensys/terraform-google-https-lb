@@ -1,7 +1,7 @@
 name: terraform-google-https-lb
 cloud: google          # aws | google | common
 tier: capability          # primitive | capability | blueprint
-maturity: experimental    # experimental | stable | deprecated
+maturity: stable          # experimental | stable | deprecated
 description: Global external HTTPS load balancer with managed certificates, HTTP redirect, serverless NEG, NEG and bucket backends, optional CDN and Cloud Armor
 owners: [platform]
 upstream: "terraform-google-modules/lb-http/google//modules/dynamic_backends 14.2.0"
