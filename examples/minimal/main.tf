@@ -12,14 +12,24 @@ variable "project_id" {
   type        = string
 }
 
-variable "service_name" {
-  description = "Name of an existing Cloud Run service in us-central1."
-  type        = string
-}
-
 variable "domain" {
   description = "Domain served by the load balancer."
   type        = string
+  default     = "lb.tf-test.olensys.com"
+}
+
+resource "google_cloud_run_v2_service" "hello" {
+  project             = var.project_id
+  name                = "olensys-test-lb-hello"
+  location            = "us-central1"
+  ingress             = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+  deletion_protection = false
+
+  template {
+    containers {
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
+    }
+  }
 }
 
 module "this" {
@@ -37,7 +47,7 @@ module "this" {
 
   domains = [var.domain]
   backends = {
-    web = { type = "cloud_run", service_name = var.service_name, region = "us-central1" }
+    web = { type = "cloud_run", service_name = google_cloud_run_v2_service.hello.name, region = "us-central1" }
   }
   default_backend = "web"
 }
