@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/Olensys/terraform-google-https-lb/compare/v1.1.2...v1.1.3) (2026-10-25)
+
+
+### Bug Fixes
+
+* **examples:** deploy the example Cloud Run service instead of requiring one ([#4](https://github.com/Olensys/terraform-google-https-lb/issues/4)) ([b1681bf](https://github.com/Olensys/terraform-google-https-lb/commit/b1681bf251ea29a8e79c18a91f8815d24e29f221))
+
 ## [1.1.2](https://github.com/Olensys/terraform-google-https-lb/compare/v1.1.1...v1.1.2) (2026-10-24)
 
 
